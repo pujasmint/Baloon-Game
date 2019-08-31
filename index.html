@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Baloon Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="counter">Score: 0</div>
+    <div class="ballons">
+        <div class="inflatable"></div>
+        <div class="string"></div>
+    </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var ballons = $(".ballons");
+    var counter = 0;
+    function start() {
+    for(let i = 0; i < 10; i++) {
+    var ballonCopy = ballons.clone();
+    var randomColor = '#'+ ('000000' + Math.floor(Math.random()*16777215).toString(16)).slice(-6);
+    ballonCopy.appendTo("body").css({
+        left: i * 200 });
+
+    var randomDes = 50 * Math.random();
+    var randomSpeed = 2000 + Math.random() * 6000;
+
+    ballonCopy.children(".inflatable").css({
+        'background-color' : randomColor,
+         transition: "2s"
+    })
+    ballonCopy.appendTo("body")
+
+    ballonCopy.click(function(){
+        pop_sound.play();
+        $(this).remove();
+        counter = counter + 1;
+        $(".counter").html(counter);
+    });
+
+    ballonCopy.animate({
+        bottom: "100%",
+        left: randomDes + '%'
+    }, randomSpeed);
+    };
+    ballons.remove();
+}
+
+function preloadPopSound() {
+    var audio = new Audio('balloon-pop.mp3');
+    audio.preload = "auto";
+    $(audio).on("loadeddata", start);
+    return audio
+}
+var pop_sound = preloadPopSound();
+    
+</script>
+
+
+</html>
